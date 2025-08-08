@@ -42,4 +42,14 @@ const fetchAllUsersAPI = () => {
     });
 }
 
-export { createUserAPI, fetchAllUsersAPI, updateUserAPI };
+const deleteUserAPI = (_id) => {
+    const URL_BACKEND = `/api/v1/user/${_id}`;
+    return axios.delete(URL_BACKEND, {
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+export { createUserAPI, fetchAllUsersAPI, updateUserAPI, deleteUserAPI };
