@@ -5,7 +5,7 @@ import UpdateUserModal from './update.user.modal';
 import ViewUserDetail from './view.user.detail';
 import { deleteUserAPI } from '../../services/api.services';
 const UserTable = (props) => {
-    const { dataUsers, loadUser } = props;
+    const { dataUsers, loadUser, current, pageSize, total, setCurrent, setPageSize } = props;
 
     const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
     const [dataUpdate, setDataUpdate] = useState(null);
@@ -14,6 +14,16 @@ const UserTable = (props) => {
     const [dataDetail, setDataDetail] = useState(null);
 
     const columns = [
+        {
+            title: "STT",
+            render: (_, record, index) => {
+                return (
+                    <>
+                        {(index + 1) + (current - 1) * pageSize}
+                    </>
+                )
+            }
+        },
         {
             title: 'Id',
             dataIndex: '_id',
@@ -77,28 +87,51 @@ const UserTable = (props) => {
         }
     }
 
-    console.log("here-1");
-    return (
-        <>
-            <Table columns={columns}
-                dataSource={dataUsers}
-                rowKey={""}
-            />
-            <UpdateUserModal
-                isModalUpdateOpen={isModalUpdateOpen}
-                setIsModalUpdateOpen={setIsModalUpdateOpen}
-                dataUpdate={dataUpdate}
-                setDataUpdate={setDataUpdate}
-                loadUser={loadUser}
-            />
-            <ViewUserDetail
-                isDetailOpen={isDetailOpen}
-                setIsDetailOpen={setIsDetailOpen}
-                dataDetail={dataDetail}
-                setDataDetail={setDataDetail}
-            />
-        </>
-    );
+    const onChange = (pagination, filters, sorter, extra) => {
+        //Nếu trang thay đổi
+        if (pagination && pagination.current) {
+            if (+pagination.currrent !== +current) {
+                setCurrent(+pagination.current)
+            }
+        }
+        //Nếu thay đổi tổng số phần tử
+        if (pagination && pagination.pageSize) {
+            if (+pagination.pageSize !== +pageSize) {
+                setCurrent(+pagination.pageSize)
+            }
+        }
+        return (
+            <>
+                <Table
+                    columns={columns}
+                    dataSource={dataUsers}
+                    rowKey={""}
+                    pagination={
+                        {
+                            current: current,
+                            pageSize: pageSize,
+                            showSizeChanger: true,
+                            total: total,
+                            showTotal: (total, range) => { return (<div> {range[0]}-{range[1]} trên {total} rows</div>) }
+                        }}
+                    onChange={onChange}
+                />
+                <UpdateUserModal
+                    isModalUpdateOpen={isModalUpdateOpen}
+                    setIsModalUpdateOpen={setIsModalUpdateOpen}
+                    dataUpdate={dataUpdate}
+                    setDataUpdate={setDataUpdate}
+                    loadUser={loadUser}
+                />
+                <ViewUserDetail
+                    isDetailOpen={isDetailOpen}
+                    setIsDetailOpen={setIsDetailOpen}
+                    dataDetail={dataDetail}
+                    setDataDetail={setDataDetail}
+                    loadUser={loadUser}
+                />
+            </>
+        );
+    }
 }
-
 export default UserTable;
