@@ -14,11 +14,10 @@ const LoginPage = () => {
     const onFinish = async (values) => {
         setLoading(true);
         const res = await loginAPI(values.email, values.password);
-        console.log("login", res);
         if (res.data) {
             message.success("Đăng nhập thành công");
-            localStorage.setItem("access_token", res.data.access_token);
-            setUser(res.data.user);
+            localStorage.setItem("access_token", res.data.data.access_token);
+            setUser(res.data.data.user);
             navigate("/");
         }
         else {
@@ -70,7 +69,11 @@ const LoginPage = () => {
                                 },
                             ]}
                         >
-                            <Input.Password />
+                            <Input.Password onKeyDown={(event) => {
+                                if (event.key === 'Enter')
+                                    form.submit()
+                            }
+                            } />
                         </Form.Item>
                         <Form.Item>
                             <div style={{

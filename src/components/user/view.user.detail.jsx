@@ -21,12 +21,9 @@ const ViewUserDetail = (props) => {
     }
     const handleUpdateUserAvatar = async () => {
         const resUpload = await handleUpdateFile(selectedFile, "avatar");
-        console.log("resUpload", resUpload);
         if (resUpload.data) {
             const newAvatar = resUpload.data.data.fileUploaded;
-            console.log("newAvatar", newAvatar);
             const resUpdateAvatar = await updateUserAvatarAPI(newAvatar, dataDetail._id, dataDetail.fullName, dataDetail.phone);
-            console.log("res", resUpdateAvatar);
             if (resUpdateAvatar.data) {
                 setIsDetailOpen(false);
                 setSelectedFile(null);
@@ -51,7 +48,6 @@ const ViewUserDetail = (props) => {
             })
         }
     }
-    console.log(preview);
     return (
         <>
             {dataDetail ?

@@ -34,7 +34,6 @@ const UpdateUserModal = (props) => {
                 description: JSON.stringify(res.message),
             })
         }
-        console.log(res);
     }
     const resetAndCloseModal = () => {
         setId("");
@@ -43,7 +42,6 @@ const UpdateUserModal = (props) => {
         setIsModalUpdateOpen(false);
         setDataUpdate(null);
     }
-    console.log("here-0");
 
     return (
         <Modal title="Update a User"

@@ -13,21 +13,15 @@ instance.interceptors.request.use(function (config) {
 });
 
 // Add a response interceptor
-instance.interceptors.response.use(function onFulfilled(response) {
-    // Any status code that lie within the range of 2xx cause this function to trigger
-    // Do something with response data
-    if (response.data && response.data.error) {
-        // Handle error response
-        return response.data;;
+instance.interceptors.request.use(function (config) {
+    if (typeof window !== "undefined" && window && window.localStorage &&
+        window.localStorage.getItem('access_token')) {
+        config.headers.Authorization = 'Bearer ' + window.localStorage.getItem('access_token');
     }
-    return response;
+    // Do something before request is sent 
+    return config;
 }, function (error) {
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    // Do something with response error
-    if (error.response && error.response.data) {
-        // Handle error response
-        return error.response.data;
-    }
+    // Do something with request error 
     return Promise.reject(error);
 });
 

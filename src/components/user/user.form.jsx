@@ -28,7 +28,6 @@ const UserForm = (props) => {
                 description: JSON.stringify(res.message),
             })
         }
-        console.log(res);
     }
     const resetAndCloseModal = () => {
         setFullName("");
