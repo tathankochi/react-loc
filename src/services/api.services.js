@@ -97,4 +97,17 @@ const registerUserAPI = (fullName, email, password, phone) => {
     });
 }
 
-export { createUserAPI, fetchAllUsersAPI, updateUserAPI, deleteUserAPI, handleUpdateFile, updateUserAvatarAPI, registerUserAPI };
+const loginAPI = (email, password) => {
+    const URL_BACKEND = "/api/v1/auth/login";
+    const data = {
+        username: email,
+        password: password
+    };
+    return axios.post(URL_BACKEND, data, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+export { createUserAPI, fetchAllUsersAPI, updateUserAPI, deleteUserAPI, handleUpdateFile, updateUserAvatarAPI, registerUserAPI, loginAPI };

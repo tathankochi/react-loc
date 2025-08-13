@@ -1,9 +1,15 @@
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Menu } from 'antd';
-import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
-import { useState } from 'react';
+import { AppstoreOutlined, AuditOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
+import { useContext, useState } from 'react';
+import { AuthContext } from '../context/auth.context';
 const Header = () => {
     const [current, setCurrent] = useState('home');
+
+    const { user } = useContext(AuthContext);
+
+    console.log("user", user);
+
     const onClick = e => {
         console.log('click ', e);
         setCurrent(e.key);
@@ -22,8 +28,23 @@ const Header = () => {
         {
             label: <Link to={"/books"}>Books</Link>,
             key: 'books',
-            icon: <SettingOutlined />,
+            icon: <AuditOutlined />,
         },
+        {
+            label: 'Cài đặt',
+            key: 'setting',
+            icon: <SettingOutlined />,
+            children: [
+                {
+                    label: <Link to={"/login"}>Đăng nhập</Link>,
+                    key: 'login'
+                },
+                {
+                    label: 'Đăng xuất',
+                    key: 'logout',
+                }
+            ]
+        }
     ];
     return (
         <Menu onClick={onClick}
