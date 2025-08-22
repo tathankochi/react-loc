@@ -97,41 +97,41 @@ const UserTable = (props) => {
         //Nếu thay đổi tổng số phần tử
         if (pagination && pagination.pageSize) {
             if (+pagination.pageSize !== +pageSize) {
-                setCurrent(+pagination.pageSize)
+                setPageSize(+pagination.pageSize)
             }
         }
-        return (
-            <>
-                <Table
-                    columns={columns}
-                    dataSource={dataUsers}
-                    rowKey={""}
-                    pagination={
-                        {
-                            current: current,
-                            pageSize: pageSize,
-                            showSizeChanger: true,
-                            total: total,
-                            showTotal: (total, range) => { return (<div> {range[0]}-{range[1]} trên {total} rows</div>) }
-                        }}
-                    onChange={onChange}
-                />
-                <UpdateUserModal
-                    isModalUpdateOpen={isModalUpdateOpen}
-                    setIsModalUpdateOpen={setIsModalUpdateOpen}
-                    dataUpdate={dataUpdate}
-                    setDataUpdate={setDataUpdate}
-                    loadUser={loadUser}
-                />
-                <ViewUserDetail
-                    isDetailOpen={isDetailOpen}
-                    setIsDetailOpen={setIsDetailOpen}
-                    dataDetail={dataDetail}
-                    setDataDetail={setDataDetail}
-                    loadUser={loadUser}
-                />
-            </>
-        );
     }
+    return (
+        <>
+            <Table
+                columns={columns}
+                dataSource={dataUsers}
+                rowKey={""}
+                pagination={
+                    {
+                        current: current,
+                        pageSize: pageSize,
+                        showSizeChanger: true,
+                        total: total,
+                        showTotal: (total, range) => { return (<div> {range[0]}-{range[1]} trên {total} rows</div>) }
+                    }}
+                onChange={onChange}
+            />
+            <UpdateUserModal
+                isModalUpdateOpen={isModalUpdateOpen}
+                setIsModalUpdateOpen={setIsModalUpdateOpen}
+                dataUpdate={dataUpdate}
+                setDataUpdate={setDataUpdate}
+                loadUser={loadUser}
+            />
+            <ViewUserDetail
+                isDetailOpen={isDetailOpen}
+                setIsDetailOpen={setIsDetailOpen}
+                dataDetail={dataDetail}
+                setDataDetail={setDataDetail}
+                loadUser={loadUser}
+            />
+        </>
+    );
 }
 export default UserTable;
