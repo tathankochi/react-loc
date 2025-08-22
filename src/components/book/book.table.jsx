@@ -4,12 +4,15 @@ import { useState } from 'react';
 import BookDetail from './book.detail';
 import CreateBookControl from './create.book.control';
 import CreateBookUncontrol from './create.book.uncontrol';
+import UpdateBookControl from './update.book.control';
 
 const BookTable = (props) => {
     const { dataBooks, current, setCurrent, pageSize, setPageSize, total, loadBook } = props;
     const [isDetailOpen, setIsDetailOpen] = useState(false);
     const [dataDetail, setDataDetail] = useState(null);
     const [isCreateOpen, setIsCreateOpen] = useState(false);
+    const [isUpdateOpen, setIsUpdateOpen] = useState(false);
+    const [dataUpdate, setDataUpdate] = useState(null);
     const columns = [
         {
             title: 'STT',
@@ -52,7 +55,12 @@ const BookTable = (props) => {
                     display: "flex",
                     gap: "20px",
                 }}>
-                    <EditOutlined />
+                    <EditOutlined
+                        onClick={() => {
+                            setDataUpdate(record);
+                            setIsUpdateOpen(true);
+                        }}
+                    />
                     <DeleteOutlined />
                 </div >
             ),
@@ -108,6 +116,13 @@ const BookTable = (props) => {
             <CreateBookUncontrol
                 isCreateOpen={isCreateOpen}
                 setIsCreateOpen={setIsCreateOpen}
+                loadBook={loadBook}
+            />
+            <UpdateBookControl
+                isUpdateOpen={isUpdateOpen}
+                setIsUpdateOpen={setIsUpdateOpen}
+                dataUpdate={dataUpdate}
+                setDataUpdate={setDataUpdate}
                 loadBook={loadBook}
             />
         </>

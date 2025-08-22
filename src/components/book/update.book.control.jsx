@@ -1,51 +1,69 @@
 import { Input, InputNumber, Modal, notification, Select } from "antd";
-import { useState } from "react";
-import { createBookAPI, handleUpdateFile } from "../../services/api.services";
+import { useEffect, useState } from "react";
+import { handleUpdateFile, updateBookAPI } from "../../services/api.services";
 
-const CreateBookControl = (props) => {
-    const { isCreateOpen, setIsCreateOpen, loadBook } = props;
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [preview, setPreview] = useState(null);
-
+const UpdateBookControl = (props) => {
+    const { isUpdateOpen, setIsUpdateOpen, dataUpdate, setDataUpdate, loadBook
+    } = props;
+    const [id, setId] = useState("");
     const [mainText, setMainText] = useState("");
     const [author, setAuthor] = useState("");
     const [price, setPrice] = useState("");
     const [quantity, setQuantity] = useState("");
     const [category, setCategory] = useState("");
 
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [preview, setPreview] = useState(null);
+    useEffect(() => {
+        if (dataUpdate && dataUpdate._id) {
+            setId(dataUpdate._id);
+            setMainText(dataUpdate.mainText);
+            setAuthor(dataUpdate.author);
+            setPrice(dataUpdate.price);
+            setQuantity(dataUpdate.quantity);
+            setCategory(dataUpdate.category);
+            setPreview(`${import.meta.env.VITE_BACKEND_URL}/images/book/${dataUpdate.thumbnail}`);
+        }
+    }, [dataUpdate]);
     const handleSubmitBtn = async () => {
-        if (!selectedFile) {
+        if (!selectedFile && !preview) {
             notification.error({
                 message: "Error create book",
                 description: "Vui lòng upload ảnh thumbmail"
             })
             return;
         }
-        //step 1: upload file
-        const resUpload = await handleUpdateFile(selectedFile, "book");
-        if (resUpload.data) {
-            const newThumbnail = resUpload.data.data.fileUploaded;
-            //step 2: create book
-            const resBook = await createBookAPI(newThumbnail, mainText, author, price, quantity, category);
-            if (resBook.data) {
-                resetAndCloseModal();
-                await loadBook();
-                notification.success({
-                    message: "Create book",
-                    description: "Thêm sách mới thành công"
-                })
+        let newThumbnail = "";
+        if (!selectedFile && preview) {
+            newThumbnail = dataUpdate.thumbnail;
+        }
+        else {
+            const resUpload = await handleUpdateFile(selectedFile, "book");
+            if (resUpload.data) {
+                newThumbnail = resUpload.data.data.fileUploaded;
             }
             else {
                 notification.error({
-                    message: "Error create book",
-                    description: JSON.stringify(resBook.message)
+                    message: "Error upload file",
+                    description: JSON.stringify(resUpload.message)
                 })
+                return;
             }
+        }
+        //step 2: update book
+        const resBook = await updateBookAPI(id, newThumbnail, mainText, author, price, quantity, category);
+        if (resBook.data) {
+            //resetAndCloseModal();
+            await loadBook();
+            notification.success({
+                message: "Create book",
+                description: "Cập nhật book thành công"
+            })
         }
         else {
             notification.error({
-                message: "Error upload file",
-                description: JSON.stringify(resUpload.message)
+                message: "Error create book",
+                description: JSON.stringify(resBook.message)
             })
         }
     }
@@ -57,7 +75,9 @@ const CreateBookControl = (props) => {
         setCategory("");
         setSelectedFile(null);
         setPreview(null);
-        setIsCreateOpen(false);
+        setId("");
+        setDataUpdate(null);
+        setIsUpdateOpen(false);
     }
     const handleOnChangeFile = (event) => {
         if (!event.target.files || event.target.files.length === 0) {
@@ -73,17 +93,22 @@ const CreateBookControl = (props) => {
     }
     return (
         <Modal
-            title="Create Book"
-            open={isCreateOpen}
-            onCancel={() => resetAndCloseModal()}
-            okText="Create"
-            onOk={() => { handleSubmitBtn() }}
+            title="Update Book"
+            open={isUpdateOpen}
+            onCancel={() => setIsUpdateOpen(false)}
+            okText="Update"
+            onOk={() => handleSubmitBtn()}
         >
             <div style={{
                 display: "flex",
                 flexDirection: "column",
                 gap: "15px"
             }}>
+                <span>Id</span>
+                <Input
+                    value={id}
+                    disabled
+                />
                 <span>Tiêu đề</span>
                 <Input
                     value={mainText}
@@ -161,8 +186,8 @@ const CreateBookControl = (props) => {
                     />
                 </>
             }
-        </Modal >
+        </Modal>
     )
 }
 
-export default CreateBookControl;
+export default UpdateBookControl
