@@ -5,6 +5,7 @@ import BookDetail from './book.detail';
 import CreateBookControl from './create.book.control';
 import CreateBookUncontrol from './create.book.uncontrol';
 import UpdateBookControl from './update.book.control';
+import UpdateBookUncontrol from './update.book.uncontrol';
 
 const BookTable = (props) => {
     const { dataBooks, current, setCurrent, pageSize, setPageSize, total, loadBook } = props;
@@ -118,7 +119,14 @@ const BookTable = (props) => {
                 setIsCreateOpen={setIsCreateOpen}
                 loadBook={loadBook}
             />
-            <UpdateBookControl
+            {/* <UpdateBookControl
+                isUpdateOpen={isUpdateOpen}
+                setIsUpdateOpen={setIsUpdateOpen}
+                dataUpdate={dataUpdate}
+                setDataUpdate={setDataUpdate}
+                loadBook={loadBook}
+            /> */}
+            <UpdateBookUncontrol
                 isUpdateOpen={isUpdateOpen}
                 setIsUpdateOpen={setIsUpdateOpen}
                 dataUpdate={dataUpdate}
