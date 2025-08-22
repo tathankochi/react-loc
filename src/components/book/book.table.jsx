@@ -3,6 +3,7 @@ import { Button, Table } from 'antd';
 import { useState } from 'react';
 import BookDetail from './book.detail';
 import CreateBookControl from './create.book.control';
+import CreateBookUncontrol from './create.book.uncontrol';
 
 const BookTable = (props) => {
     const { dataBooks, current, setCurrent, pageSize, setPageSize, total, loadBook } = props;
@@ -99,7 +100,12 @@ const BookTable = (props) => {
                 dataDetail={dataDetail}
             />
 
-            <CreateBookControl
+            {/* <CreateBookControl
+                isCreateOpen={isCreateOpen}
+                setIsCreateOpen={setIsCreateOpen}
+                loadBook={loadBook}
+            /> */}
+            <CreateBookUncontrol
                 isCreateOpen={isCreateOpen}
                 setIsCreateOpen={setIsCreateOpen}
                 loadBook={loadBook}
