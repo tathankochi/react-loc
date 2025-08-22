@@ -92,6 +92,11 @@ const deleteUserAPI = (_id) => {
     });
 }
 
+const deleteBookAPI = (_id) => {
+    const URL_BACKEND = `/api/v1/book/${_id}`;
+    return axios.delete(URL_BACKEND);
+}
+
 const handleUpdateFile = (file, folder) => {
     const URL_BACKEND = `/api/v1/file/upload`;
     let config = {
@@ -153,4 +158,4 @@ const fetchAllBooksAPI = (current, pageSize) => {
     });
 }
 
-export { createUserAPI, fetchAllUsersAPI, updateUserAPI, deleteUserAPI, handleUpdateFile, updateUserAvatarAPI, registerUserAPI, loginAPI, getAccountAPI, logoutAPI, fetchAllBooksAPI, createBookAPI, updateBookAPI };
+export { createUserAPI, fetchAllUsersAPI, updateUserAPI, deleteUserAPI, handleUpdateFile, updateUserAvatarAPI, registerUserAPI, loginAPI, getAccountAPI, logoutAPI, fetchAllBooksAPI, createBookAPI, updateBookAPI, deleteBookAPI };

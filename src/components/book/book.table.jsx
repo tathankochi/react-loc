@@ -1,11 +1,12 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Button, Table } from 'antd';
+import { Button, notification, Popconfirm, Table } from 'antd';
 import { useState } from 'react';
 import BookDetail from './book.detail';
 import CreateBookControl from './create.book.control';
 import CreateBookUncontrol from './create.book.uncontrol';
 import UpdateBookControl from './update.book.control';
 import UpdateBookUncontrol from './update.book.uncontrol';
+import { deleteBookAPI } from '../../services/api.services';
 
 const BookTable = (props) => {
     const { dataBooks, current, setCurrent, pageSize, setPageSize, total, loadBook } = props;
@@ -62,11 +63,37 @@ const BookTable = (props) => {
                             setIsUpdateOpen(true);
                         }}
                     />
-                    <DeleteOutlined />
+                    <Popconfirm
+                        title="Delete the task"
+                        description="Are you sure to delete this task?"
+                        onConfirm={() => {
+                            handleDeleteUser(record._id)
+                        }}
+                        okText="Yes"
+                        cancelText="No"
+                        placement="left"
+                    ><DeleteOutlined style={{ cursor: "pointer", color: "red" }} /></Popconfirm>
                 </div >
             ),
         },
     ];
+
+    const handleDeleteUser = async (_id) => {
+        const res = await deleteBookAPI(_id);
+        if (res.data) {
+            notification.success({
+                message: "Success",
+                description: "Book deleted successfully"
+            });
+            await loadBook();
+        }
+        else {
+            notification.error({
+                message: "Error",
+                description: JSON.stringify(res.message)
+            });
+        }
+    }
 
     const onChange = (pagination, filters, sorter, extra) => {
         console.log("🚀 ~ onChange ~ pagination:", pagination)
